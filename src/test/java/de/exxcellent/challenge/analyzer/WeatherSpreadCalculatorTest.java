@@ -27,7 +27,7 @@ public class WeatherSpreadCalculatorTest {
         assertThatNullPointerException()
                 .isThrownBy(() -> calculator.apply(null))
                 .as("Pass null to calculator")
-                .withMessageContaining("WeatherData");
+                .withMessageContaining("weatherData");
     }
 
     @Test
