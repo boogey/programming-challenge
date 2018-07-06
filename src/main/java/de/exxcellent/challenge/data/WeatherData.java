@@ -21,12 +21,12 @@ public class WeatherData {
     private int day;
 
     /**
-     * Property of the maximum of temperature of the day.
-     */
-    private int maxTemp;
-
-    /**
      * Property of the minimum of temperature of the day.
      */
     private int minTemp;
+
+    /**
+     * Property of the maximum of temperature of the day.
+     */
+    private int maxTemp;
 }
