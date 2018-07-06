@@ -17,17 +17,17 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class WeatherDataTest {
 
-    private void assertWeatherData(final WeatherData data) {
+    private void assertWeatherData(final WeatherData data, final int expectedDay, final int expectedMin, final int expectedMax) {
         assertSoftly(s -> {
             s.assertThat(data.getDay())
                     .as("Has default day value")
-                    .isEqualTo(0);
+                    .isEqualTo(expectedDay);
             s.assertThat(data.getMinTemp())
                     .as("Has default min temp")
-                    .isEqualTo(0);
+                    .isEqualTo(expectedMin);
             s.assertThat(data.getMaxTemp())
                     .as("Has default max temp")
-                    .isEqualTo(0);
+                    .isEqualTo(expectedMax);
         });
     }
 
@@ -35,10 +35,15 @@ public class WeatherDataTest {
     @DisplayName("Constructor tests")
     Collection<DynamicTest> constructors() {
         return Arrays.asList(
-                dynamicTest("Non arg constructor", () -> assertWeatherData(new WeatherData())),
+                dynamicTest("Non arg constructor",
+                        () -> assertWeatherData(new WeatherData(), 0, 0, 0)),
                 dynamicTest("All arg constructor",
-                        () -> assertWeatherData(
-                                new WeatherData(RandomUtils.nextInt(), RandomUtils.nextInt(), RandomUtils.nextInt()))));
+                        () -> {
+                            final int day = RandomUtils.nextInt();
+                            final int min = RandomUtils.nextInt();
+                            final int max = RandomUtils.nextInt();
+                            assertWeatherData(new WeatherData(day, min, max), day, min, max);
+                        }));
     }
 
     @TestFactory
