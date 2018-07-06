@@ -38,8 +38,8 @@ public class WeatherDataTest {
     @DisplayName("Property Tests")
     Collection<DynamicTest> getterSetter() {
         return Arrays.asList(setterGetterTest("day", RandomUtils.nextInt()),
-                setterGetterTest("minTemp", RandomUtils.nextDouble()),
-                setterGetterTest("maxTemp", RandomUtils.nextDouble()));
+                setterGetterTest("minTemp", RandomUtils.nextInt()),
+                setterGetterTest("maxTemp", RandomUtils.nextInt()));
     }
 
     DynamicTest setterGetterTest(final String property, final Object value) {
