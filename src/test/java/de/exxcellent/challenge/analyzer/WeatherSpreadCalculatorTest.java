@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Random;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,11 +33,9 @@ public class WeatherSpreadCalculatorTest {
     @Test
     @DisplayName("<max> - <min> = <spread>")
     void calculation() {
-        int min = RandomUtils.nextInt();
-        int max = RandomUtils.nextInt();
-        WeatherData data = new WeatherData();
-        data.setMinTemp(min);
-        data.setMaxTemp(max);
+        final int min = RandomUtils.nextInt();
+        final int max = RandomUtils.nextInt();
+        final WeatherData data = new WeatherData(RandomUtils.nextInt(), min, max);
 
         assertThat(calculator.apply(data))
                 .as("Has calculation result")
