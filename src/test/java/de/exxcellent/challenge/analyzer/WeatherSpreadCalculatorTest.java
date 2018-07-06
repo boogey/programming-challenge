@@ -17,7 +17,6 @@ public class WeatherSpreadCalculatorTest {
 
     @BeforeEach
     void setUp() {
-        // TODO create instance of calculator
         calculator = new WeatherSpreadCalculator();
     }
 
