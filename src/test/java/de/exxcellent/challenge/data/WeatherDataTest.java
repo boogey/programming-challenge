@@ -24,10 +24,10 @@ public class WeatherDataTest {
                     .isEqualTo(0);
             s.assertThat(data.getMinTemp())
                     .as("Has default min temp")
-                    .isEqualTo(0.0);
+                    .isEqualTo(0);
             s.assertThat(data.getMaxTemp())
                     .as("Has default max temp")
-                    .isEqualTo(0.0);
+                    .isEqualTo(0);
         });
     }
 
