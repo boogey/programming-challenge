@@ -6,4 +6,10 @@ class WeatherData {
   - minTemp
 }
 
+class WeatherSpreadCalculator<WeatherData, Integer>
+interface Function<T, R>
+
+WeatherSpreadCalculator ..> Function
+WeatherSpreadCalculator -- WeatherData
+
 @enduml
