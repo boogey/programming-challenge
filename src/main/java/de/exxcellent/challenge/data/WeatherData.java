@@ -1,6 +1,8 @@
 package de.exxcellent.challenge.data;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Data class to store information regarding the weather data.
@@ -9,6 +11,8 @@ import lombok.Data;
  * </p>
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class WeatherData {
 
     /**
@@ -17,12 +21,12 @@ public class WeatherData {
     private int day;
 
     /**
-     * Property of the maximum of temperature of the day.
-     */
-    private double maxTemp;
-
-    /**
      * Property of the minimum of temperature of the day.
      */
-    private double minTemp;
+    private int minTemp;
+
+    /**
+     * Property of the maximum of temperature of the day.
+     */
+    private int maxTemp;
 }
