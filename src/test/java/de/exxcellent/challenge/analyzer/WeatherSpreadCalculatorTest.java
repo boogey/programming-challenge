@@ -22,6 +22,7 @@ public class WeatherSpreadCalculatorTest {
 
     @Test
     @DisplayName("Null-Handling of parameter")
+    @SuppressWarnings("ReturnValueIgnored")
     void nullParameter() {
         assertThatNullPointerException()
                 .isThrownBy(() -> calculator.apply(null))
