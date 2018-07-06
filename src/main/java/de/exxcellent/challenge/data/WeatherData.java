@@ -1,6 +1,8 @@
 package de.exxcellent.challenge.data;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Data class to store information regarding the weather data.
@@ -9,6 +11,8 @@ import lombok.Data;
  * </p>
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class WeatherData {
 
     /**

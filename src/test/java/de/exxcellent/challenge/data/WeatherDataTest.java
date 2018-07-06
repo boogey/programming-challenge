@@ -4,7 +4,6 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,13 +13,11 @@ import java.util.Collection;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class WeatherDataTest {
 
-    @Test
-    @DisplayName("Non arg constructor")
-    void constructor() {
-        final WeatherData data = new WeatherData();
+    private void assertWeatherData(final WeatherData data) {
         assertSoftly(s -> {
             s.assertThat(data.getDay())
                     .as("Has default day value")
@@ -35,6 +32,16 @@ public class WeatherDataTest {
     }
 
     @TestFactory
+    @DisplayName("Constructor tests")
+    Collection<DynamicTest> constructors() {
+        return Arrays.asList(
+                dynamicTest("Non arg constructor", () -> assertWeatherData(new WeatherData())),
+                dynamicTest("All arg constructor",
+                        () -> assertWeatherData(
+                                new WeatherData(RandomUtils.nextInt(), RandomUtils.nextInt(), RandomUtils.nextInt()))));
+    }
+
+    @TestFactory
     @DisplayName("Property Tests")
     Collection<DynamicTest> getterSetter() {
         return Arrays.asList(setterGetterTest("day", RandomUtils.nextInt()),
@@ -43,7 +50,7 @@ public class WeatherDataTest {
     }
 
     DynamicTest setterGetterTest(final String property, final Object value) {
-        return DynamicTest.dynamicTest(String.format("Set-Get property %s", property), () -> {
+        return dynamicTest(String.format("Set-Get property %s", property), () -> {
             final WeatherData data = new WeatherData();
             try {
                 PropertyUtils.setSimpleProperty(data, property, value);
