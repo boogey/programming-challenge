@@ -6,10 +6,14 @@ class WeatherData {
   - minTemp
 }
 
+class WeatherDataReader<List<WeatherData>>
 class WeatherSpreadCalculator<WeatherData, Integer>
 interface Function<T, R>
+interface Supplier<R>
 
 WeatherSpreadCalculator ..> Function
 WeatherSpreadCalculator -- WeatherData
+WeatherDataReader ..> Supplier
+WeatherDataReader -- WeatherData
 
 @enduml
