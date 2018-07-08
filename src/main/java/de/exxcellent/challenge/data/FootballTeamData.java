@@ -1,7 +1,6 @@
 package de.exxcellent.challenge.data;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,25 +14,24 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class FootballTeamData {
 
     /**
      * Property of number of day.
      */
-    @JsonProperty("Team")
+    @CsvBindByName(column = "Team")
     private String team = "";
 
     /**
      * Property of the minimum of temperature of the day.
      */
-    @JsonProperty("Goals")
+    @CsvBindByName(column = "Goals")
     private int goals = 0;
 
     /**
      * Property of the maximum of temperature of the day.
      */
-    @JsonProperty("Goals Allowed")
+    @CsvBindByName(column = "Goals Allowed")
     private int goalsAllowed = 0;
 
 }

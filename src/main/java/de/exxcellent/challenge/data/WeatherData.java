@@ -1,7 +1,6 @@
 package de.exxcellent.challenge.data;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,24 +14,23 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({"Day", "MxT", "MnT"})
 public class WeatherData {
 
     /**
      * Property of number of day.
      */
-    @JsonProperty("Day")
+    @CsvBindByName(column = "Day")
     private String day = "";
 
     /**
      * Property of the minimum of temperature of the day.
      */
-    @JsonProperty("MnT")
+    @CsvBindByName(column = "MnT")
     private int minTemp = 0;
 
     /**
      * Property of the maximum of temperature of the day.
      */
-    @JsonProperty("MxT")
+    @CsvBindByName(column = "MxT")
     private int maxTemp = 0;
 }
