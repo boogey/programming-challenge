@@ -11,9 +11,9 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
+import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 import static org.mockito.Mockito.mock;
@@ -26,10 +26,10 @@ class GenericCsvReaderTest {
         final GenericCsvReader<Object> reader = new GenericCsvReader<>();
         return Arrays.asList(dynamicTest("InputStream is null", () ->
                 assertThatNullPointerException()
-                        .isThrownBy(() -> reader.readFrom(null, Object.class))
+                        .isThrownBy(() -> reader.configureReader(null, Object.class))
         ), dynamicTest("Class is null", () ->
                 assertThatNullPointerException()
-                        .isThrownBy(() -> reader.readFrom(mock(Reader.class), null))
+                        .isThrownBy(() -> reader.configureReader(mock(Reader.class), null))
         ));
     }
 
@@ -43,13 +43,18 @@ class GenericCsvReaderTest {
     @Test
     @DisplayName("Read WeatherData")
     void readWeatherData() {
-        final GenericCsvReader<WeatherData> csvReader = new GenericCsvReader<>();
 
         try (final Reader reader = prepareWeatherData()) {
-            final Iterator<WeatherData> data = csvReader.readFrom(reader, WeatherData.class);
-            assertThat(data.hasNext())
-                    .as("Has elements")
-                    .isTrue();
+            final GenericCsvReader<WeatherData> csvReader = new GenericCsvReader<>();
+            csvReader.configureReader(reader, WeatherData.class);
+            assertSoftly(s -> {
+                s.assertThat(csvReader.requestData())
+                        .as("Request success")
+                        .isTrue();
+                s.assertThat(csvReader.hasNext())
+                        .as("Reader contains data")
+                        .isTrue();
+            });
         } catch (final IOException ioe) {
             fail("Unable to read from StringReader", ioe);
         }
@@ -58,11 +63,11 @@ class GenericCsvReaderTest {
     @Test
     @DisplayName("Check CSV Parser")
     void checkWeatherData() {
-        final GenericCsvReader<WeatherData> csvReader = new GenericCsvReader<>();
 
         try (final Reader reader = prepareWeatherData()) {
-            final Iterator<WeatherData> data = csvReader.readFrom(reader, WeatherData.class);
-            final WeatherData first = data.next();
+            final GenericCsvReader<WeatherData> csvReader = new GenericCsvReader<>();
+            csvReader.configureReader(reader, WeatherData.class);
+            final WeatherData first = csvReader.next();
             assertSoftly(s -> {
                 s.assertThat(first.getDay())
                         .isEqualTo("1");
