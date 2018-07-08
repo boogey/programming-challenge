@@ -9,15 +9,17 @@ import org.junit.jupiter.api.TestFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class WeatherDataTest {
+class WeatherDataTest {
 
-    private void assertWeatherData(final WeatherData data, final int expectedDay, final int expectedMin, final int expectedMax) {
+    private void assertWeatherData(
+            final WeatherData data, final String expectedDay, final int expectedMin, final int expectedMax) {
         assertSoftly(s -> {
             s.assertThat(data.getDay())
                     .as("Has default day value")
@@ -36,10 +38,10 @@ public class WeatherDataTest {
     Collection<DynamicTest> constructors() {
         return Arrays.asList(
                 dynamicTest("Non arg constructor",
-                        () -> assertWeatherData(new WeatherData(), 0, 0, 0)),
+                        () -> assertWeatherData(new WeatherData(), "", 0, 0)),
                 dynamicTest("All arg constructor",
                         () -> {
-                            final int day = RandomUtils.nextInt();
+                            final String day = UUID.randomUUID().toString();
                             final int min = RandomUtils.nextInt();
                             final int max = RandomUtils.nextInt();
                             assertWeatherData(new WeatherData(day, min, max), day, min, max);
@@ -49,7 +51,7 @@ public class WeatherDataTest {
     @TestFactory
     @DisplayName("Property Tests")
     Collection<DynamicTest> getterSetter() {
-        return Arrays.asList(setterGetterTest("day", RandomUtils.nextInt()),
+        return Arrays.asList(setterGetterTest("day", UUID.randomUUID().toString()),
                 setterGetterTest("minTemp", RandomUtils.nextInt()),
                 setterGetterTest("maxTemp", RandomUtils.nextInt()));
     }

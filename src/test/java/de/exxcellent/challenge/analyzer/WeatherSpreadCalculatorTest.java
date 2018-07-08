@@ -6,14 +6,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.function.Function;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
-public class WeatherSpreadCalculatorTest {
+class WeatherSpreadCalculatorTest {
 
-    private Function<WeatherData, Integer> calculator;
+    private WeatherSpreadCalculator calculator;
 
     @BeforeEach
     void setUp() {
@@ -25,7 +25,7 @@ public class WeatherSpreadCalculatorTest {
     @SuppressWarnings("ReturnValueIgnored")
     void nullParameter() {
         assertThatNullPointerException()
-                .isThrownBy(() -> calculator.apply(null))
+                .isThrownBy(() -> calculator.calculate(null))
                 .as("Pass null to calculator")
                 .withMessageContaining("weatherData");
     }
@@ -35,9 +35,9 @@ public class WeatherSpreadCalculatorTest {
     void calculation() {
         final int min = RandomUtils.nextInt();
         final int max = RandomUtils.nextInt();
-        final WeatherData data = new WeatherData(RandomUtils.nextInt(), min, max);
+        final WeatherData data = new WeatherData(UUID.randomUUID().toString(), min, max);
 
-        assertThat(calculator.apply(data))
+        assertThat(calculator.calculate(data))
                 .as("Has calculation result")
                 .isEqualTo(max - min);
     }
