@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import lombok.NonNull;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,5 +46,10 @@ public class ClassLoaderReader implements IDataSource {
 
         Preconditions.checkNotNull(is);
         return (S) new InputStreamReader(is);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
