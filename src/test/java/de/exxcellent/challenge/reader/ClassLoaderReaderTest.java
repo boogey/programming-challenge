@@ -4,10 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 class ClassLoaderReaderTest {
 
@@ -42,8 +44,11 @@ class ClassLoaderReaderTest {
     @Test
     @DisplayName("Valid source")
     void getSource() {
-        final Reader reader = source.getSource(Reader.class);
-        assertThat(reader)
-                .isNotNull();
+        try (final Reader reader = source.getSource(Reader.class)) {
+            assertThat(reader)
+                    .isNotNull();
+        } catch (final IOException ioe) {
+            fail("Unexpected exception is thrown", ioe);
+        }
     }
 }

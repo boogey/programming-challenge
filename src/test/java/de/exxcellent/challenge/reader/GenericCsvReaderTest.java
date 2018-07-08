@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Collection;
@@ -52,49 +53,49 @@ class GenericCsvReaderTest {
     @Test
     @DisplayName("Read WeatherData")
     void readWeatherData() {
-
-        final GenericCsvReader<WeatherData> csvReader = new GenericCsvReader<>();
-        csvReader.configureReader(prepareWeatherData(), WeatherData.class);
-        assertSoftly(s -> {
-            s.assertThat(csvReader.requestData())
-                    .as("Request success")
-                    .isTrue();
-            s.assertThat(csvReader.hasNext())
+        try (final GenericCsvReader<WeatherData> csvReader = new GenericCsvReader<>()) {
+            csvReader.configureReader(prepareWeatherData(), WeatherData.class);
+            csvReader.requestData();
+            assertThat(csvReader.hasNext())
                     .as("Reader contains data")
                     .isTrue();
-        });
+        } catch (final IOException ioe) {
+            fail("Unexpected exception was thrown", ioe);
+        }
     }
 
     @Test
     @DisplayName("Check CSV Parser")
     void checkWeatherData() {
-        final GenericCsvReader<WeatherData> csvReader = new GenericCsvReader<>();
-        csvReader.configureReader(prepareWeatherData(), WeatherData.class);
-        assertThat(csvReader.requestData())
-                .isTrue();
-        
-        final WeatherData first = csvReader.next();
-        assertSoftly(s -> {
-            s.assertThat(first.getDay())
-                    .isEqualTo("1");
-            s.assertThat(first.getMinTemp())
-                    .isEqualTo(59);
-            s.assertThat(first.getMaxTemp())
-                    .isEqualTo(88);
-        });
+        try (final GenericCsvReader<WeatherData> csvReader = new GenericCsvReader<>()) {
+            csvReader.configureReader(prepareWeatherData(), WeatherData.class);
+            csvReader.requestData();
+
+            final WeatherData first = csvReader.next();
+            assertSoftly(s -> {
+                s.assertThat(first.getDay())
+                        .isEqualTo("1");
+                s.assertThat(first.getMinTemp())
+                        .isEqualTo(59);
+                s.assertThat(first.getMaxTemp())
+                        .isEqualTo(88);
+            });
+        } catch (final IOException ioe) {
+            fail("Unexpected exception was thrown", ioe);
+        }
     }
 
     @Test
     @DisplayName("Unable to parse from source")
-    void unableToRead() {
+    void unableToRead() throws IOException {
         final IDataSource source = mock(IDataSource.class);
         when(source.provideSourceType(any())).thenReturn(true);
-        when(source.getSource(any())).thenThrow(RuntimeException.class);
+        when(source.getSource(any())).thenThrow(IOException.class);
 
         final GenericCsvReader<WeatherData> csvReader = new GenericCsvReader<>();
         csvReader.configureReader(source, WeatherData.class);
 
-        assertThatExceptionOfType(RuntimeException.class)
+        assertThatExceptionOfType(IOException.class)
                 .isThrownBy(() -> csvReader.requestData());
     }
 }

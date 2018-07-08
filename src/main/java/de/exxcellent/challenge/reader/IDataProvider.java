@@ -1,5 +1,6 @@
 package de.exxcellent.challenge.reader;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 /**
@@ -13,7 +14,7 @@ public interface IDataProvider<D> extends Iterator<D> {
     /**
      * Lazy start method to perform the data request.
      *
-     * @return <code>true</code> if the request was successful, <code>false</code> otherwise.
+     * @throws IOException if data could not be successful received
      */
-    boolean requestData();
+    void requestData() throws IOException;
 }

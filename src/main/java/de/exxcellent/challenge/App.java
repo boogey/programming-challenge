@@ -17,24 +17,31 @@ import java.util.function.Supplier;
  */
 public final class App {
 
-    public static void main(final String... args) {
+    public static void main(final String... args) throws ExecutionException {
 
         final ExecutorService executor = Executors.newCachedThreadPool();
         final CompletionService<Supplier<String>> service = new ExecutorCompletionService<>(executor);
-        service.submit(() -> {
-            final TaskSolver<WeatherData> task = new TaskSolver<>("de/exxcellent/challenge/weather.csv",
-                    new WeatherSpreadCalculator(),
-                    WeatherData.class);
-            final Set<WeatherData> data = task.call();
-            return () -> {
-                final StringBuilder builder = new StringBuilder();
-                data.stream()
-                        .map(d -> String.format("Day with smallest temperature spread : %s%n", d.getDay()))
-                        .forEach(builder::append);
-                return builder.toString();
-            };
-        });
 
+        App.submitWeatherSolver(service);
+        App.submitFootballSolver(service);
+
+        App.printOutResults(2, executor, service);
+    }
+
+    private static void printOutResults(final int tasks, final ExecutorService executor, final CompletionService<Supplier<String>> service) throws ExecutionException {
+        for (int i = 0; i < tasks; i++) {
+            try {
+                final Future<Supplier<String>> result = service.take();
+                System.out.println(result.get().get());
+            } catch (final InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                executor.shutdownNow();
+            }
+        }
+    }
+
+    private static void submitFootballSolver(final CompletionService<Supplier<String>> service) {
         service.submit(() -> {
             final TaskSolver<FootballTeamData> task = new TaskSolver<>("de/exxcellent/challenge/football.csv",
                     new FootballSpreadCalculator(),
@@ -48,22 +55,21 @@ public final class App {
                 return builder.toString();
             };
         });
+    }
 
-        for (int i = 0; i < 2; i++) {
-            try {
-                final Future<Supplier<String>> result = service.take();
-                System.out.println(result.get().get());
-            } catch (final InterruptedException e) {
-                // Something went wrong with a task submitted
-                System.out.println("Error Interrupted exception");
-                e.printStackTrace();
-            } catch (final ExecutionException e) {
-                // Something went wrong with the result
-                e.printStackTrace();
-                System.out.println("Error get() threw exception");
-            } finally {
-                executor.shutdownNow();
-            }
-        }
+    private static void submitWeatherSolver(final CompletionService<Supplier<String>> service) {
+        service.submit(() -> {
+            final TaskSolver<WeatherData> task = new TaskSolver<>("de/exxcellent/challenge/weather.csv",
+                    new WeatherSpreadCalculator(),
+                    WeatherData.class);
+            final Set<WeatherData> data = task.call();
+            return () -> {
+                final StringBuilder builder = new StringBuilder();
+                data.stream()
+                        .map(d -> String.format("Day with smallest temperature spread : %s%n", d.getDay()))
+                        .forEach(builder::append);
+                return builder.toString();
+            };
+        });
     }
 }

@@ -73,7 +73,10 @@
                 <configuration>
                     <compilerId>javac-with-errorprone</compilerId>
                     <forceJavacCompilerUse>true</forceJavacCompilerUse>
-                    <compilerArgs>-Xep:ParameterName:OFF</compilerArgs>
+                    <compilerArgs>
+                        <arg>-Xep:ParameterName:OFF</arg>
+                        <arg>-Xlint:unchecked</arg>
+                    </compilerArgs>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>

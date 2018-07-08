@@ -1,5 +1,7 @@
 package de.exxcellent.challenge.reader;
 
+import java.io.IOException;
+
 /**
  * Describe the data source provider that could be provide a special source based on the expected class. For generic
  * usage without to know which source is contained, the {@link #provideSourceType(Class)} method could be used to check,
@@ -25,6 +27,7 @@ public interface IDataSource {
      * @param expectedSource as {@link Class} that match the return value type.
      * @param <S>            as generic class type that is expected from caller point of view.
      * @return the underlying source object.
+     * @throws IOException if source could not be found.
      */
-    <S> S getSource(Class<S> expectedSource);
+    <S> S getSource(Class<S> expectedSource) throws IOException;
 }

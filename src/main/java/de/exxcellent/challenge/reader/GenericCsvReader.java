@@ -1,15 +1,15 @@
 package de.exxcellent.challenge.reader;
 
 import com.google.common.base.Preconditions;
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.NonNull;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.Reader;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Objects;
 
 /**
  * Generic csv reader that use the jackson csv reader mechanism inside. Class implements the {@link IDataProvider} and
@@ -17,7 +17,7 @@ import java.util.Objects;
  *
  * @param <D> as generic type that contains the expected POJO class reference.
  */
-public class GenericCsvReader<D> implements IDataProvider<D> {
+public class GenericCsvReader<D> implements IDataProvider<D>, Closeable {
 
     private Iterator<D> dataContent;
 
@@ -41,11 +41,9 @@ public class GenericCsvReader<D> implements IDataProvider<D> {
         dataContent = csv.iterator();
     }
 
-    @CanIgnoreReturnValue
     @Override
-    public boolean requestData() {
+    public void requestData() throws IOException {
         configureReaderInternal(source.getSource(Reader.class), pojoClass);
-        return Objects.nonNull(dataContent);
     }
 
     /**
@@ -70,5 +68,10 @@ public class GenericCsvReader<D> implements IDataProvider<D> {
     @Override
     public D next() {
         return dataContent.next();
+    }
+
+    @Override
+    public void close() throws IOException {
+        source.getSource(Reader.class).close();
     }
 }

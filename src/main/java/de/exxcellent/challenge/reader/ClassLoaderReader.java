@@ -4,12 +4,12 @@ import com.google.common.base.Preconditions;
 import lombok.NonNull;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Objects;
 
 /**
  * IDataSource implementation that provide resources from {@link ClassLoader#getSystemClassLoader()}
@@ -40,16 +40,13 @@ public class ClassLoaderReader implements IDataSource {
      * </p>
      */
     @Override
-    public <S> S getSource(@NonNull final Class<S> expectedSource) {
+    public <S> S getSource(@NonNull final Class<S> expectedSource) throws IOException {
         Preconditions.checkArgument(provideSourceType(expectedSource), "%s is not supported", expectedSource);
         final InputStream is = ClassLoader.getSystemResourceAsStream(classLoaderPath);
 
-        Preconditions.checkNotNull(is);
-        return (S) new InputStreamReader(is);
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        if (Objects.isNull(is)) {
+            throw new IOException(String.format("Unable to find %s inside system class loader", classLoaderPath));
+        }
+        return expectedSource.cast(new InputStreamReader(is));
     }
 }
