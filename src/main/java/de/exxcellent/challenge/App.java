@@ -45,7 +45,7 @@ public final class App {
 
     private static void submitFootballSolver(final CompletionService<Supplier<String>> service) {
         service.submit(() -> {
-            final TaskSolver<FootballTeamData> task = new TaskSolver<>("de/exxcellent/challenge/football.csv",
+            final TaskSolver<FootballTeamData> task = new TaskSolver<>("/de/exxcellent/challenge/football.csv",
                     new FootballSpreadCalculator(),
                     FootballTeamData.class);
             final Set<FootballTeamData> data = task.call();
@@ -61,7 +61,7 @@ public final class App {
 
     private static void submitWeatherSolver(final CompletionService<Supplier<String>> service) {
         service.submit(() -> {
-            final TaskSolver<WeatherData> task = new TaskSolver<>("de/exxcellent/challenge/weather.csv",
+            final TaskSolver<WeatherData> task = new TaskSolver<>("/de/exxcellent/challenge/weather.csv",
                     new WeatherSpreadCalculator(),
                     WeatherData.class);
             final Set<WeatherData> data = task.call();

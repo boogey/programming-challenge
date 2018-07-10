@@ -22,12 +22,13 @@ import static org.mockito.Mockito.mock;
 
 class TaskSolverTest {
 
+    @SuppressWarnings(value = "unchecked")
     @TestFactory
     Collection<DynamicTest> nullConstructorValues() {
         return Arrays.asList(
                 dynamicTest("file is <null>",
                         () -> assertThatNullPointerException()
-                                .isThrownBy(() -> new TaskSolver<Object>(
+                                .isThrownBy(() -> new TaskSolver<>(
                                         null, mock(ISpreadCalculator.class), Object.class))),
                 dynamicTest("ISpreadCalculator is <null>",
                         () -> assertThatNullPointerException()
@@ -50,7 +51,7 @@ class TaskSolverTest {
     }
 
     private <D> void assertTaskResult(final Class<D> pojoClass, final ISpreadCalculator<D> calculator) {
-        final TaskSolver<D> task = new TaskSolver<>("de/exxcellent/challenge/weather.csv",
+        final TaskSolver<D> task = new TaskSolver<>("/de/exxcellent/challenge/weather.csv",
                 calculator,
                 pojoClass);
         try {

@@ -17,7 +17,7 @@ class ClassLoaderReaderTest {
 
     @BeforeEach
     void setUp() {
-        source = new ClassLoaderReader("test");
+        source = new ClassLoaderReader("/test");
     }
 
     @Test

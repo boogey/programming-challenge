@@ -42,10 +42,10 @@ public class ClassLoaderReader implements IDataSource {
     @Override
     public <S> S getSource(@NonNull final Class<S> expectedSource) throws IOException {
         Preconditions.checkArgument(provideSourceType(expectedSource), "%s is not supported", expectedSource);
-        final InputStream is = ClassLoader.getSystemResourceAsStream(classLoaderPath);
+        final InputStream is = getClass().getResourceAsStream(classLoaderPath);
 
         if (Objects.isNull(is)) {
-            throw new IOException(String.format("Unable to find %s inside system class loader", classLoaderPath));
+            throw new IOException(String.format("Unable to find %s inside class loader", classLoaderPath));
         }
         return expectedSource.cast(new InputStreamReader(is));
     }
