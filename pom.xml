@@ -132,9 +132,6 @@
                 </executions>
                 <configuration>
                     <mainClass>de.exxcellent.challenge.App</mainClass>
-                    <arguments>
-                        <argument>foo</argument>
-                    </arguments>
                 </configuration>
             </plugin>
         </plugins>
