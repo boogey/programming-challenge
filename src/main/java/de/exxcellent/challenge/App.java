@@ -28,7 +28,9 @@ public final class App {
         App.printOutResults(2, executor, service);
     }
 
-    private static void printOutResults(final int tasks, final ExecutorService executor, final CompletionService<Supplier<String>> service) throws ExecutionException {
+    private static void printOutResults(
+            final int tasks, final ExecutorService executor, final CompletionService<Supplier<String>> service)
+            throws ExecutionException {
         for (int i = 0; i < tasks; i++) {
             try {
                 final Future<Supplier<String>> result = service.take();
