@@ -1,0 +1,48 @@
+@startuml
+
+class WeatherData {
+    - day
+    - maxTemp
+    - minTemp
+}
+
+class FootballTeamData {
+    - team
+    - goals
+    - goalsAllowed
+}
+
+class App
+class TaskSolver<Set<D>>
+class GenericCsvReader<D>
+class WeatherSpreadCalculator<WeatherData>
+class FootballSpreadCalculator<FootballTeamData>
+class ClassLoaderReader
+class SmallestSpreadAnalyzer<D>
+interface ISpreadCalculator<D>
+interface Closable
+interface IDataProvider<D>
+interface IDataSource
+interface Callable<D>
+
+IDataProvider -- IDataSource : get source >
+ClassLoaderReader ..> IDataSource
+FootballSpreadCalculator ..> ISpreadCalculator
+FootballSpreadCalculator -- FootballTeamData : generate >
+WeatherSpreadCalculator ..> ISpreadCalculator
+WeatherSpreadCalculator -- WeatherData : generate >
+GenericCsvReader ..> IDataProvider
+GenericCsvReader ..> Closable
+
+TaskSolver ..> Callable
+TaskSolver -- ISpreadCalculator
+TaskSolver -- ClassLoaderReader
+TaskSolver -- GenericCsvReader
+TaskSolver -- SmallestSpreadAnalyzer
+
+App -- TaskSolver : weather >
+App -- TaskSolver : football >
+App -- FootballSpreadCalculator
+App -- WeatherSpreadCalculator
+
+@enduml
