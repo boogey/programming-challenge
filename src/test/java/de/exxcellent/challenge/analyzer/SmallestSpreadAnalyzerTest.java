@@ -22,7 +22,7 @@ class SmallestSpreadAnalyzerTest {
     @Test
     @DisplayName("Check valid multiple object choose")
     void smallestObjects() {
-        assertSmallestObjects(RandomUtils.nextInt(0, 10));
+        assertSmallestObjects(RandomUtils.nextInt(2, 10));
     }
 
     void assertSmallestObjects(final int number) {
